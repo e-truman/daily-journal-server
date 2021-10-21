@@ -1,9 +1,12 @@
-from entries import get_all_entries, get_single_entry
+from entries import get_all_entries, get_single_entry, delete_entry
+
+from http.server import BaseHTTPRequestHandler, HTTPServer # classes coming from python, use properties on those classes
 # Here's a class. It inherits from another class.
 # For now, think of a class as a container for functions that
 # work together for a common purpose. In this case, that
 # common purpose is to respond to HTTP requests from a client.
 class HandleRequests(BaseHTTPRequestHandler):
+    # importing class into this file. passing as a parameter into handle requests, inheriting that built in class. We can ACCESS PROPERTIES ... if we want
     # This is a Docstring it should be at the beginning of all classes and functions
     # It gives a description of the class or function
     """Controls the functionality of any GET, PUT, POST, DELETE requests to the server
@@ -33,6 +36,8 @@ class HandleRequests(BaseHTTPRequestHandler):
 
     # Here's a class function
     def _set_headers(self, status):
+        # header id metacommunication-communicates how communicating. body has the data, header has what type of content in it, what is accepted, what methods accepted. 
+        # property inherited from basehttp request
         # Notice this Docstring also includes information about the arguments passed to the function
         """Sets the status code, Content-Type and Access-Control-Allow-Origin
         headers on the response
@@ -146,33 +151,19 @@ class HandleRequests(BaseHTTPRequestHandler):
     #     # Encode the new animal and send in response
     #         self.wfile.write("".encode())
 
-    # def do_DELETE(self):
-    # # Set a 204 response code
-    #     self._set_headers(204)
+    def do_DELETE(self):
+    # Set a 204 response code
+        self._set_headers(204)
 
-    # # Parse the URL
-    #     (resource, id) = self.parse_url(self.path)
+    # Parse the URL
+        (resource, id) = self.parse_url(self.path)
 
-    # # Delete a single animal from the list
-    #     if resource == "animals":
-    #         delete_animal(id)
+    # Delete a single animal from the list
+        if resource == "entries":
+            delete_entry(id)
 
-    # # Encode the new animal and send in response
-    #         self.wfile.write("".encode())
-    #     if resource == "customers":
-    #         delete_customer(id)
-
-    # # Encode the new animal and send in response
-    #         self.wfile.write("".encode())
-    #     if resource == "employees":
-    #         delete_employee(id)
-    # # Encode the new animal and send in response
-    #         self.wfile.write("".encode())
-    #     if resource == "locations":
-    #         delete_location(id)
-
-    # # Encode the new animal and send in response
-    #         self.wfile.write("".encode())
+    # Encode the new animal and send in response
+            self.wfile.write("".encode())
 
 # This function is not inside the class. It is the starting
 # point of this application.
@@ -183,6 +174,7 @@ def main():
     port = 8088
     HTTPServer((host, port), HandleRequests).serve_forever()
 
+# using http server as a built in method and invoking it. always outside class
 
 if __name__ == "__main__":
     main()

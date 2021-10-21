@@ -5,11 +5,13 @@ from models import Entry
 
 def get_all_entries():
     # Open a connection to the database
-    with sqlite3.connect("./journal.db") as conn:
+    with sqlite3.connect("./journal.db") as conn: # allows to use sqlite3 with package we imported. use .connect to interact with database. use with as syntax
 
         # Just use these. It's a Black Box.
+        # on conn class instance, row factory is a property or method. set equal to sqlite3.row. tells to get rows out of database. isntructions for how to get row
         conn.row_factory = sqlite3.Row
         db_cursor = conn.cursor()
+        #conn.cursor after we know how to get rows. have to do this conn.cursor and execute in order. makes environment to execute query
 
         # Write the SQL query to get the information you want
         db_cursor.execute("""
@@ -18,14 +20,14 @@ def get_all_entries():
             a.date,
             a.entry,
             a.mood_id
-        FROM entry a
+        FROM journal a
         """)
 
         # Initialize an empty list to hold all animal representations
         entries = []
 
         # Convert rows of data into a Python list
-        dataset = db_cursor.fetchall()
+        dataset = db_cursor.fetchall() # gets everything in select statement
 
         # Iterate list of data returned from database
         for row in dataset:
@@ -57,7 +59,7 @@ def get_single_entry(id):
             a.date,
             a.entry,
             a.mood_id
-        FROM entry a
+        FROM journal a
         WHERE a.id = ?
         """, ( id, ))
 
@@ -65,7 +67,18 @@ def get_single_entry(id):
         data = db_cursor.fetchone()
 
         # Create an entry instance from the current row
-        entry = Entry(row['id'], row['date'], row['entry'],
-                            row['mood_id'])
+        entry = Entry(data['id'], data['date'], data['entry'],
+                            data['mood_id'])
 
         return json.dumps(entry.__dict__)
+
+def delete_entry(id):
+    with sqlite3.connect("./journal.db") as conn:
+        db_cursor = conn.cursor()
+
+        db_cursor.execute("""
+        DELETE FROM Journal
+        WHERE id = ?
+        """, (id, ))
+
+

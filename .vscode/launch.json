@@ -1,0 +1,16 @@
+// tells vscode how to launch server
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Request Handler",
+            "type": "python",
+            "request": "launch",
+            "program": "./request_handler.py",
+            "console": "integratedTerminal",
+            "autoReload": {
+                "enable": true
+            }
+        }
+    ]
+}
