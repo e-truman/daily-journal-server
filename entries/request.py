@@ -160,3 +160,31 @@ def create_entry(new_entry):
 
 
     return json.dumps(new_entry)
+
+def update_entry(id, new_entry):
+    with sqlite3.connect("./journal.db") as conn:
+        db_cursor = conn.cursor()
+
+        # setting the fields, telling where to update using the id that was passed in
+        db_cursor.execute("""
+        UPDATE Journal
+            SET 
+                date = ?,
+                entry = ?,
+                mood_id = ?
+        WHERE id = ?
+        """, (new_entry['date'], new_entry['entry'],
+              new_entry['mood_id'], id, ))
+            
+
+        # Were any rows affected?
+        # Did the client send an `id` that exists?
+        rows_affected = db_cursor.rowcount
+        # call rowcount to see if anything changed when we call sql query
+
+    if rows_affected == 0:
+        # Forces 404 response by main module
+        return False
+    else:
+        # Forces 204 response by main module
+        return True

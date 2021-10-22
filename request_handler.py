@@ -1,4 +1,4 @@
-from entries import get_all_entries, get_single_entry, delete_entry, search_entries, create_entry
+from entries import get_all_entries, get_single_entry, delete_entry, search_entries, create_entry, update_entry
 import json
 from http.server import BaseHTTPRequestHandler, HTTPServer # classes coming from python, use properties on those classes
 # Here's a class. It inherits from another class.
@@ -140,39 +140,21 @@ class HandleRequests(BaseHTTPRequestHandler):
     # It handles any PUT request.
     
 
-    # def do_PUT(self):
-    #     self._set_headers(204)
-    #     content_len = int(self.headers.get('content-length', 0))
-    #     post_body = self.rfile.read(content_len)
-    #     post_body = json.loads(post_body)
+    def do_PUT(self):
+        self._set_headers(204)
+        content_len = int(self.headers.get('content-length', 0))
+        post_body = self.rfile.read(content_len)
+        post_body = json.loads(post_body)
 
-    #     # Parse the URL
-    #     (resource, id) = self.parse_url(self.path)
+        # Parse the URL
+        (resource, id) = self.parse_url(self.path)
 
-    #     # Delete a single animal from the list
-    #     if resource == "animals":
-    #         update_animal(id, post_body)
+        # Delete a single animal from the list
+        if resource == "entries":
+            update_entry(id, post_body)
 
-    #     # Encode the new animal and send in response
-    #         self.wfile.write("".encode())
-
-    #     if resource == "employees":
-    #         update_employee(id, post_body)
-
-    #     # Encode the new animal and send in response
-    #         self.wfile.write("".encode())
-
-    #     if resource == "customers":
-    #         update_customer(id, post_body)
-
-    #     # Encode the new animal and send in response
-    #         self.wfile.write("".encode())
-
-    #     if resource == "locations":
-    #         update_location(id, post_body)
-
-    #     # Encode the new animal and send in response
-    #         self.wfile.write("".encode())
+        # Encode the new animal and send in response
+            self.wfile.write("".encode())
 
     def do_DELETE(self):
     # Set a 204 response code
